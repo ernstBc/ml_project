@@ -7,6 +7,9 @@ from sklearn.model_selection import train_test_split
 from src.handle_exception import CustomException
 from src.logger import logging
 
+from src.components.data_transformation import DataTransformer
+from src.components.trainer import Trainer
+
 @dataclass
 class DataIngestionConfig:
     train_data_path:str = os.path.join('artifacts', 'train.csv')
@@ -20,7 +23,7 @@ class DataIngestion:
         self.ingestion_config=DataIngestionConfig()
     
     
-    def initiate_data_ingestion(self):
+    def init_data_ingestion(self):
         logging.info("Iniciando Data Ingestion")
         try:
             df=pd.read_csv(os.path.join('notebooks','data','StudentsPerformance.csv'))
@@ -46,6 +49,15 @@ class DataIngestion:
             logging.info('Error al cargar la base de datos.')
             raise CustomException(e, sys)
 
+
+import warnings
+warnings.filterwarnings('ignore')
 if __name__=='__main__':
-    o=DataIngestion()
-    o.initiate_data_ingestion()
+    ingestion=DataIngestion()
+    transformer=DataTransformer()
+    trainer=Trainer()
+
+    train_path, test_path=ingestion.init_data_ingestion()
+    train_arr, test_arr, preprocess_path=transformer.init_data_transformer(train_path, test_path)
+    metrics=trainer.init_trainer(train_arr, test_arr, preprocess_path)
+
