@@ -59,5 +59,4 @@ if __name__=='__main__':
 
     train_path, test_path=ingestion.init_data_ingestion()
     train_arr, test_arr, preprocess_path=transformer.init_data_transformer(train_path, test_path)
-    metrics=trainer.init_trainer(train_arr, test_arr, preprocess_path)
-
+    metrics=trainer.init_trainer(train_arr, test_arr, preprocess_path, with_tuning=False)

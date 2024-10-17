@@ -5,33 +5,25 @@ import sys
 from src.logger import logging
 from src.handle_exception import CustomException
 from src.utils import save_artifact, load_artifact, fit_models
+from src.config.config import MODEL_FOLDER_PATH, METRICS_FOLDER_PATH
+from src.models_utils import models, models_params
 from dataclasses import dataclass
-
-# modelos
-from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
-from sklearn.linear_model import LinearRegression
-from sklearn.neighbors import KNeighborsRegressor
-from sklearn.tree import DecisionTreeRegressor
-from xgboost import XGBRegressor
-from catboost import CatBoostRegressor
 
 
 @dataclass
 class TrainerConfig:
-    trainer_artifact_path:str=os.path.join('artifacts',
-                                           'models',
-                                           'models',
+    trainer_artifact_path:str=os.path.join(MODEL_FOLDER_PATH,
                                            f'model-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.pkl')
-    trainer_metrics_path:str=os.path.join('artifacts',
-                                           'models',
-                                           'metrics',
+    trainer_metrics_path:str=os.path.join(METRICS_FOLDER_PATH,
                                            f'models-{datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.json')
+
 
 class Trainer:
     def __init__(self):
         self.trainer_config=TrainerConfig()
 
-    def init_trainer(self, train_data, test_data, preprocessor_path):
+
+    def init_trainer(self, train_data, test_data, preprocessor_path, with_tuning=False):
         try:
             logging.info('Init trainer')
             preprocess=load_artifact(preprocessor_path)
@@ -41,22 +33,21 @@ class Trainer:
             y_train, y_test=train_data[:, -1], test_data[:, -1]
 
 
-            models={
-                'LinearRegression':LinearRegression(),
-                'DecisionTreeRegressor':DecisionTreeRegressor(),
-                'KNeighborsRegressor': KNeighborsRegressor(),
-                'RandomForestRegressor': RandomForestRegressor(),
-                'GradientBoostingRegressor':GradientBoostingRegressor(),
-                'XGBRegressor': XGBRegressor(),
-                'CatBoostRegressor': CatBoostRegressor(verbose=0)
-                }
-            
-            report, best_mae_score, best_model_name=fit_models(x_train=x_train,
+            if with_tuning:
+                logging.info('INIT training sin tuning')
+                report, best_mae_score, best_model=fit_models(x_train=x_train,
+                                                          x_test=x_test,
+                                                          y_train=y_train,
+                                                          y_test=y_test,
+                                                          models=models,
+                                                          params=models_params)
+            else:
+                logging.info('INIT training con tuning')
+                report, best_mae_score, best_model=fit_models(x_train=x_train,
                                                           x_test=x_test,
                                                           y_train=y_train,
                                                           y_test=y_test,
                                                           models=models)
-            best_model=models[best_model_name].fit(x_train, y_train)
 
             logging.info('Reporte creado')
             save_artifact(self.trainer_config.trainer_metrics_path, report, is_json=True)
