@@ -73,19 +73,17 @@ def fit_models(x_train, x_test, y_train,y_test, models:Dict, params:Dict=None):
         for model_name, model in models.items():
             if params is None:
                 model.fit(x_train,y_train)
-
-                train_preds=model.predict(x_train)
-                test_preds=model.predict(x_test)
+                
             else:
                 model_params=params[model_name]
 
                 grid=GridSearchCV(model, model_params, scoring='neg_mean_squared_error',cv=3, n_jobs=-1)
                 grid.fit(x_train, y_train)
                 
+                model= grid.best_estimator_
 
-                train_preds=grid.predict(x_train)
-                test_preds=grid.predict(x_test)
-
+            train_preds=model.predict(x_train)
+            test_preds=model.predict(x_test)
 
             train_metrics=eval_reg_model(y_train, train_preds)
             test_metrics=eval_reg_model(y_test, test_preds, )

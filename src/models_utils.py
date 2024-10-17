@@ -5,8 +5,6 @@ from sklearn.tree import DecisionTreeRegressor
 from xgboost import XGBRegressor
 from catboost import CatBoostRegressor
 
-from sklearn.model_selection import GridSearchCV
-
 models={
     'LinearRegression':LinearRegression(),
     'DecisionTreeRegressor':DecisionTreeRegressor(),
@@ -36,6 +34,7 @@ models_params={
     },
 
     'RandomForestRegressor': {
+        'n_jobs':[-1],
         'n_estimators': [10, 50, 100, 500],
         'criterion': ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
         'max_depth':[1, 3 , 5, 10, None],

@@ -1,6 +1,7 @@
-import os
 import pandas as pd
+import sys
 
+from src.handle_exception import CustomException
 from src.logger import logging
 from src.utils import load_artifact, get_lasted_model
 from src.config.config import PREPROCESS_FILE_PATH, MODEL_FOLDER_PATH
@@ -11,14 +12,17 @@ class PredictionPipeline:
         pass
 
     def predict(self, features):
-        preprocess=load_artifact(PREPROCESS_FILE_PATH)
-        model=get_lasted_model(MODEL_FOLDER_PATH)
+        try:
+            preprocess=load_artifact(PREPROCESS_FILE_PATH)
+            model=get_lasted_model(MODEL_FOLDER_PATH)
 
-        data_process=preprocess.transform(features)
+            data_process=preprocess.transform(features)
 
-        preds=model.predict(data_process)
+            preds=model.predict(data_process)
 
-        return preds
+            return preds
+        except Exception as e:
+            raise CustomException('Error al tratar de realizar la predicccion de datos. Verifique que hay al menos un modelo entrenado.', sys)
 
 
 
