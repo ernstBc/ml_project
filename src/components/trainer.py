@@ -6,7 +6,7 @@ from src.logger import logging
 from src.handle_exception import CustomException
 from src.utils import save_artifact, load_artifact, fit_models
 from src.config.config import MODEL_FOLDER_PATH, METRICS_FOLDER_PATH
-from src.models_utils import models, models_params
+from src.config.models_config import models, models_params
 from dataclasses import dataclass
 
 

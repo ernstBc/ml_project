@@ -1,5 +1,5 @@
 from sklearn.ensemble import GradientBoostingRegressor, RandomForestRegressor
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LinearRegression, Lasso, Ridge
 from sklearn.neighbors import KNeighborsRegressor
 from sklearn.tree import DecisionTreeRegressor
 from xgboost import XGBRegressor
@@ -7,6 +7,8 @@ from catboost import CatBoostRegressor
 
 models={
     'LinearRegression':LinearRegression(),
+    'Lasso':Lasso(),
+    'Ridge':Ridge(),
     'DecisionTreeRegressor':DecisionTreeRegressor(),
     'KNeighborsRegressor': KNeighborsRegressor(),
     'RandomForestRegressor': RandomForestRegressor(),
@@ -17,6 +19,16 @@ models={
 
 models_params={
     'LinearRegression':{
+        'fit_intercept':[True, False]
+    },
+
+    'Ridge':{
+        'alpha':[0.3, 0.8, 1.0, 2.0],
+        'fit_intercept':[True, False]
+    },
+
+    'Lasso':{
+        'alpha':[0.3, 0.8, 1.0, 2.0],
         'fit_intercept':[True, False]
     },
 
@@ -47,7 +59,7 @@ models_params={
         'loss':['squared_error', 'absolute_error', 'huber', 'quantile'],
         'learning_rate':[0.1, 0.01, 0.001],
         'n_estimators': [10, 50, 100, 500],
-        'subsample':[1.0, 0.75, 0.5, 0.25],
+        'subsample':[1.0, 0.6, 0.3],
         'criterion': ['squared_error', 'friedman_mse', 'absolute_error', 'poisson'],
         'min_samples_split':[2, 5, 10, 20, None],
         'min_samples_leaf':[1, 5, 10, 20, None]
