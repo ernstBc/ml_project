@@ -2,7 +2,6 @@ import streamlit as st
 from src.pipeline.service_pipeline import PredictionPipeline, ExampleData
 
 
-
 predition_pipeline=PredictionPipeline()
 
 gender=st.selectbox('Gender', ['female', 'male'])
@@ -13,8 +12,6 @@ parental_edu=st.selectbox('Parental Level of Education', ['some high school', 'h
                                                            "bachelor's degree", "master's degree"])
 lunch=st.selectbox('Lunch', ['standard', 'free/reduced'])
 test_preparation_course=st.selectbox('Test Preparation Course', ['none', 'completed'])
-
-
 
 
 if st.button('Predict'):
