@@ -7,9 +7,6 @@ from sklearn.model_selection import train_test_split
 from src.handle_exception import CustomException
 from src.logger import logging
 
-from src.components.data_transformation import DataTransformer
-from src.components.trainer import Trainer
-
 @dataclass
 class DataIngestionConfig:
     train_data_path:str = os.path.join('artifacts', 'train.csv')
@@ -48,15 +45,3 @@ class DataIngestion:
         except Exception as e:
             logging.info('Error al cargar la base de datos.')
             raise CustomException(e, sys)
-
-
-import warnings
-warnings.filterwarnings('ignore')
-if __name__=='__main__':
-    ingestion=DataIngestion()
-    transformer=DataTransformer()
-    trainer=Trainer()
-
-    train_path, test_path=ingestion.init_data_ingestion()
-    train_arr, test_arr, preprocess_path=transformer.init_data_transformer(train_path, test_path)
-    metrics=trainer.init_trainer(train_arr, test_arr, preprocess_path, with_tuning=True)

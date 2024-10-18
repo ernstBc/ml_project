@@ -116,7 +116,3 @@ def get_lasted_model(models_path:str) -> str:
     lasted_model_name=sorted(path_models)[-1]
     lasted_model_dir=os.path.join(models_path, lasted_model_name)
     return load_artifact(lasted_model_dir)
-
-
-if __name__=='__main__':
-    print(get_lasted_model(r'artifacts\models\models'))

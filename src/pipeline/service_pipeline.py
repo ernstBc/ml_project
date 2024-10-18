@@ -3,8 +3,8 @@ import sys
 
 from src.handle_exception import CustomException
 from src.logger import logging
-from src.utils import load_artifact, get_lasted_model
-from src.config.config import PREPROCESS_FILE_PATH, MODEL_FOLDER_PATH
+from src.utils import load_artifact
+from src.config.config import PREPROCESS_FILE_PATH, BEST_MODEL_PATH
 
 
 class PredictionPipeline:
@@ -14,7 +14,7 @@ class PredictionPipeline:
     def predict(self, features):
         try:
             preprocess=load_artifact(PREPROCESS_FILE_PATH)
-            model=get_lasted_model(MODEL_FOLDER_PATH)
+            model=load_artifact(BEST_MODEL_PATH)
 
             data_process=preprocess.transform(features)
 
