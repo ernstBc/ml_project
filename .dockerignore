@@ -1,0 +1,19 @@
+catboost_info
+machine_learning_project.egg-info
+venv
+
+# cochinadas 
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
