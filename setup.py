@@ -20,7 +20,6 @@ setup(
     name='machine_learning_project',
     version='0.0.1',
     author='ErnstB',
-    author_email='ernestobravc@gmail.com',
     packages=find_packages(),
     install_requires=get_requirements('requirements.txt'),
 )
